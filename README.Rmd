@@ -1,0 +1,41 @@
+---
+title: "Creation of figure from research paper"
+output: html_document
+---
+
+**Comments**
+
+load library(readxl)
+load library(tidyverse)
+use readxl to get the data into a dataset
+read the data in ggplot
+set the x axis to LandHet and y to `species richness` and 
+base color of lines, linetype, fill on `feeding guide`
+make a geom_smooth to create a line with 95% confidence intervals shaded
+get rid of the legend
+manually set the color and linetypes and fill color
+set the axis and format properly
+
+**Code**
+
+library(readxl)
+library(tidyverse)
+
+allData = read_excel("~/Reproducibility_Project/journal.pone.0200438.s004.xlsx", sheet = "Richness feeding guild")
+
+ggplot(data = allData, aes(x=LandHet, y=`species richness`, col=`feeding guild`, linetype=`feeding guild`, fill=`feeding guild`)) +
+  geom_smooth(method=lm, se=TRUE) +
+  guides(fill=FALSE) +
+  scale_color_manual(name="Feeding Guild", values=c(Carnivore="yellow", 
+              Granivore="red", Insectivore="blue", Omnivore="gray45")) +
+  scale_fill_manual(name="Feeding Guild", values=c(Carnivore="yellow3", 
+              Granivore="tomato2", Insectivore="dodgerblue2", Omnivore="gray")) +
+  scale_linetype_manual(name="Feeding Guild", values=c(Carnivore="solid", 
+             Granivore="twodash", Insectivore="dotdash", Omnivore="dotted")) +
+  theme_bw() +
+  xlab("Landscape heterogeneity (Perennial habitat diversity)") +
+  ylab("Functional group richness") +
+  scale_x_continuous(breaks = round(seq(min(0), max(1.3), by = 0.2),1)) +
+  theme(panel.grid.minor=element_blank(),
+        panel.grid.major=element_blank()) +
+  geom_text(x = 1.25, y = 21.5, label = "2000m", show.legend = FALSE)
